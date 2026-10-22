@@ -83,26 +83,27 @@ document.addEventListener('click', function (e) {
 
 /* ================================================================ contents status + error-hunt score */
 function updateToc() {
-  $$('.sheetpage[id^="u"]').forEach(function (sec) {
+  $$('.sheetpage.unit').forEach(function (sec) {
     var el = document.getElementById('toc-' + sec.id); if (!el) return;
     var qs = $$('.qa[data-q]', sec), opened = qs.filter(function (qa) { return S.open[qa.dataset.q]; });
     var ok = opened.filter(function (qa) { return mark(qa) === 'ok'; }).length;
     el.textContent = opened.length === qs.length ? ok + '/' + qs.length + ' correct' : '';
   });
-  var hunt = $$('#hunt .qa[data-q]'), done = hunt.filter(function (qa) { return S.open[qa.dataset.q]; });
-  var hok = done.filter(function (qa) { return mark(qa) === 'ok'; }).length;
-  var ts = document.getElementById('toc-hunt'); if (ts) ts.textContent = done.length ? hok + '/' + done.length + ' correct' : '';
-  var hs = document.getElementById('huntscore');
-  if (hs) {
+  $$('.sheetpage.hunt').forEach(function (sec) {
+    var hunt = $$('.qa[data-q]', sec), done = hunt.filter(function (qa) { return S.open[qa.dataset.q]; });
+    var hok = done.filter(function (qa) { return mark(qa) === 'ok'; }).length;
+    var ts = document.getElementById('toc-' + sec.id); if (ts) ts.textContent = done.length ? hok + '/' + done.length + ' correct' : '';
+    var hs = $('.huntscore', sec); if (!hs) return;
     if (done.length < hunt.length) { hs.innerHTML = ''; return; }
     var missed = hunt.filter(function (qa) { return mark(qa) !== 'ok'; });
     var units = {};
     missed.forEach(function (qa) { var a = $('.unitref', qa); if (a) units[a.getAttribute('href')] = a.textContent.replace('→ ', ''); });
-    hs.innerHTML = '<div class="result"><div class="rscore"><div class="big">' + hok + '<span>/' + hunt.length + '</span></div><div>errors found</div></div>' +
+    hs.innerHTML = '<div class="result"><div class="rscore"><div class="big">' + hok + '<span>/' + hunt.length + '</span></div><div>' +
+      (sec.id === 'shunt' ? 'misspelled words found' : 'errors found') + '</div></div>' +
       (missed.length ? '<p style="margin:0"><b>Your checklist.</b> Go back to these units, then check for these errors in your next essay:</p><p style="margin:0">' +
         Object.keys(units).map(function (h) { return '<a href="' + h + '">' + esc(units[h]) + '</a>'; }).join('<br>') + '</p>'
-        : '<p style="margin:0"><b>All 24 found.</b> Your grammar accuracy is at band 8–9 level for these points.</p>') + '</div>';
-  }
+        : '<p style="margin:0"><b>All ' + hunt.length + ' found.</b> Your accuracy on these points is at band 8–9 level.</p>') + '</div>';
+  });
 }
 updateToc();
 

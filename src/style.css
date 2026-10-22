@@ -211,7 +211,9 @@ mark.uh { color: inherit; padding: 0; cursor: pointer; }
 .wrongpart { margin: 0 0 6px; font-family: var(--f-ui); font-size: 14.5px; }
 .fixline { margin: 0 0 4px; } .fixline .ok { color: var(--ok); font-weight: 700; font-family: var(--f-ui); }
 .alsos { font-family: var(--f-ui); font-size: 13px; color: var(--faint); margin-left: 10px; }
-.unitref { font-family: var(--f-ui); font-size: 13.5px; font-weight: 600; text-decoration: none; margin-left: 4px; white-space: nowrap; }
+.unitref { font-family: var(--f-ui); font-size: 13.5px; font-weight: 600; text-decoration: none; margin-left: 4px; display: inline-block; max-width: 100%; }
 .unitref:hover { text-decoration: underline; }
-#huntscore:empty { display: none; }
+.huntscore:empty { display: none; }
+.bandex + .bandex { border-top: 1px solid #D9D2EC; margin-top: 14px; padding-top: 14px; }
+.bandex .small { margin: 0; }
 @media (max-width: 520px) { .qctl .ch.opt { width: 100%; } .toks { font-size: 16.5px; } }
